@@ -1,6 +1,6 @@
 package com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.valueobjects;
 
-import com.francinjr.sistema_gerenciamento_reserva_salas.commons.DomainException;
+import com.francinjr.sistema_gerenciamento_reserva_salas.commons.exceptions.DominioException;
 import jakarta.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -18,7 +18,7 @@ public class Dinheiro {
 
     public Dinheiro(Double valor) {
         if (valor == null) {
-            throw new DomainException("O valor não pode ser nulo.");
+            throw new DominioException("O valor não pode ser nulo.");
         }
 
         BigDecimal valorConvertido = BigDecimal.valueOf(valor);

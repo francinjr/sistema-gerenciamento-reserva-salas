@@ -1,6 +1,7 @@
-package com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.entities;
+package com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.domain.entities;
 
-import com.francinjr.sistema_gerenciamento_reserva_salas.commons.DomainException;
+import com.francinjr.sistema_gerenciamento_reserva_salas.commons.exceptions.DominioException;
+import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.entities.Sala;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "tb_setor")
+@Table(name = "tb_setores")
 public class Setor {
 
     @Id
@@ -48,17 +49,17 @@ public class Setor {
 
     public void validarNome(String nome) {
         if(nome == null) {
-            throw new DomainException("O nome da sala não pode ser null");
+            throw new DominioException("O nome da sala não pode ser null");
         }
 
         if(nome.isBlank()) {
-            throw new DomainException("O nome não pode estar em branco.");
+            throw new DominioException("O nome não pode estar em branco.");
         }
     }
 
     public void adicionarSala(Sala sala) {
         if(sala == null) {
-            throw new DomainException("Não é permitido adicionar uma sala null para um setor.");
+            throw new DominioException("Não é permitido adicionar uma sala null para um setor.");
         }
 
         this.salas.add(sala);

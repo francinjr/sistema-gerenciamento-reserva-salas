@@ -1,7 +1,8 @@
 package com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.entities;
 
-import com.francinjr.sistema_gerenciamento_reserva_salas.commons.DomainException;
+import com.francinjr.sistema_gerenciamento_reserva_salas.commons.exceptions.DominioException;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.valueobjects.Dinheiro;
+import com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.domain.entities.Setor;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -65,11 +66,11 @@ public class Sala {
 
     public void validarNome(String nome) {
         if(nome == null) {
-            throw new DomainException("O nome da sala não pode ser null");
+            throw new DominioException("O nome da sala não pode ser null");
         }
 
         if(nome.isBlank()) {
-            throw new DomainException("O nome não pode estar em branco.");
+            throw new DominioException("O nome não pode estar em branco.");
         }
     }
 }
