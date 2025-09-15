@@ -1,4 +1,3 @@
-/* Importação de uma fonte moderna e reset básico */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
@@ -25,6 +24,7 @@ html, body {
   color: var(--text-primary);
 }
 
+
 .layout-container {
   display: flex;
   min-height: 100vh;
@@ -45,6 +45,7 @@ html, body {
   display: flex;
   flex-direction: column;
 }
+
 
 .sidebar-header {
   padding: 1.5rem;
@@ -75,12 +76,7 @@ html, body {
   transition: all 0.2s ease-in-out;
 }
 
-.sidebar-nav a:hover {
-  background-color: var(--sidebar-active-bg);
-  color: var(--text-primary);
-}
-
-.sidebar-nav a.active {
+.sidebar-nav a:hover, .sidebar-nav a.active {
   background-color: var(--sidebar-active-bg);
   color: var(--text-primary);
   font-weight: 600;
@@ -104,6 +100,7 @@ html, body {
   align-items: center;
   gap: 0.8rem;
 }
+
 
 .content-card {
   background-color: var(--card-bg);
@@ -159,6 +156,7 @@ html, body {
   color: var(--text-secondary);
 }
 
+/* Tabela */
 .table-wrapper {
   flex-grow: 1;
   overflow-y: auto;
@@ -194,6 +192,7 @@ tbody td {
   gap: 0.5rem;
 }
 
+/* Rodapé do Card (Paginação) */
 .card-footer {
   display: flex;
   justify-content: space-between;
@@ -204,32 +203,54 @@ tbody td {
   color: var(--text-secondary);
 }
 
-.items-per-page, .pagination {
+.items-per-page {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.items-per-page select {
+.items-per-page select, .filter-select {
   padding: 0.4rem;
   border-radius: 6px;
   border: 1px solid #dee2e6;
+  font-family: 'Inter', sans-serif;
 }
 
-.pagination-nav button {
-  background-color: #fff;
-  border: 1px solid #dee2e6;
+.page-info {
+  text-align: center;
+}
+
+.pagination-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pagination-nav a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border-color);
   border-radius: 6px;
-  padding: 0.4rem 0.8rem;
-  cursor: pointer;
   color: var(--text-secondary);
+  text-decoration: none;
+  transition: background-color 0.2s, color 0.2s;
 }
 
-.pagination-nav button:disabled {
-  cursor: not-allowed;
+.pagination-nav a:hover {
+  background-color: var(--sidebar-active-bg);
+}
+
+.pagination-nav a.disabled {
   opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
+
+/* Rodapé da Página */
 .page-footer {
   text-align: center;
   padding: 1.5rem 0 0 0;
@@ -238,12 +259,17 @@ tbody td {
 }
 
 .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 0.6rem 1.2rem;
   border: 1px solid transparent;
   border-radius: 6px;
   font-size: 0.9rem;
   font-weight: 500;
+  line-height: 1.5;
   text-decoration: none;
+  text-align: center;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 }
@@ -266,6 +292,17 @@ tbody td {
 .btn-secondary:hover {
   background-color: var(--sidebar-active-bg);
   border-color: #adb5bd;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  border-color: #c82333;
 }
 
 .btn-danger-outline {
@@ -336,4 +373,86 @@ tbody td {
   padding-top: 1.5rem;
   margin-top: 1rem;
   border-top: 1px solid var(--border-color);
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 450px;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(-50px);
+  transition: transform 0.3s ease;
+}
+
+.modal-overlay.show .modal {
+  transform: translateY(0);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.close-modal-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--text-secondary);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.modal-body {
+  padding: 1.5rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border-color);
+  background-color: var(--sidebar-active-bg);
+}
+
+.modal-footer .btn {
+  min-width: 90px;
+  justify-content: center;
 }
