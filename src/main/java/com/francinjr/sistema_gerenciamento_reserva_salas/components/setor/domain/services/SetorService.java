@@ -63,4 +63,9 @@ public class SetorService {
             );
         }
     }
+
+    @Transactional(readOnly = true)
+    public List<Setor> buscarTodos() {
+        return setorRepository.findAll();
+    }
 }
