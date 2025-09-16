@@ -3,7 +3,9 @@ package com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.web.c
 import com.francinjr.sistema_gerenciamento_reserva_salas.commons.utils.DataIntegrityViolationTranslator;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.domain.entities.Setor;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.domain.services.SetorService;
+import com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.web.dtos.BuscarSetorDto;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.web.dtos.SalvarSetorDto;
+import com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.web.mappers.SetorMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -28,6 +30,7 @@ public class SetorController {
 
     private final SetorService setorService;
     private final DataIntegrityViolationTranslator violationTranslator;
+    private final SetorMapper setorMapper;
 
     @GetMapping("/listar")
     public String listarSetores(
@@ -35,8 +38,10 @@ public class SetorController {
             @PageableDefault(size = 10, sort = "nome") Pageable pageable,
             Model model) {
 
-        Page<Setor> setoresPage = setorService.buscar(nome, pageable);
-        model.addAttribute("setoresPage", setoresPage);
+        Page<Setor> setoresPageDeEntidades = setorService.buscar(nome, pageable);
+        Page<BuscarSetorDto> setoresPageDeDtos = setorMapper.paginaEntidadeParaPaginaDto(setoresPageDeEntidades);
+
+        model.addAttribute("setoresPage", setoresPageDeDtos);
         model.addAttribute("termoBusca", nome);
 
         return "setores/listar";

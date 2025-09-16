@@ -3,19 +3,7 @@ package com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain
 import com.francinjr.sistema_gerenciamento_reserva_salas.commons.exceptions.DominioException;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.valueobjects.Dinheiro;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.domain.entities.Setor;
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import java.math.BigDecimal;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -39,38 +27,66 @@ public class Sala {
     )
     private Dinheiro preco;
 
-    @Column(name = "descricao", nullable = true)
+    @Column(name = "descricao")
     private String descricao;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-            name = "setor_id",
-            nullable = false,
-            foreignKey = @ForeignKey(name = "fk_sala_setor")
-    )
+    @JoinColumn(name = "setor_id", nullable = false, foreignKey = @ForeignKey(name = "fk_sala_para_setor"))
     private Setor setor;
 
-    public Sala(Long id, String nome, Double preco, String descricao, Setor setor) {
+    public Sala(Long id, String nome, Dinheiro preco, String descricao, Setor setor) {
         this.validarNome(nome);
+        this.validarPreco(preco);
+        this.validarSetor(setor);
 
         this.id = id;
         this.nome = nome;
-        this.preco = new Dinheiro(preco);
+        this.preco = preco;
         this.descricao = descricao;
         this.setor = setor;
     }
 
-    public BigDecimal getPreco() {
-        return this.preco.getValor();
+    public void changeNome(String nome) {
+        validarNome(nome);
+        this.nome = nome;
     }
 
-    public void validarNome(String nome) {
-        if(nome == null) {
-            throw new DominioException("O nome da sala não pode ser null");
-        }
+    public void changePreco(Dinheiro preco) {
+        validarPreco(preco);
+        this.preco = preco;
+    }
 
-        if(nome.isBlank()) {
-            throw new DominioException("O nome não pode estar em branco.");
+    public void changeDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public void changeSetor(Setor setor) {
+        validarSetor(setor);
+        this.setor = setor;
+    }
+
+    public void atualizar(Sala salaComDadosNovos) {
+        this.changeNome(salaComDadosNovos.getNome());
+        this.changePreco(salaComDadosNovos.getPreco());
+        this.changeDescricao(salaComDadosNovos.getDescricao());
+        this.changeSetor(salaComDadosNovos.getSetor());
+    }
+
+    private void validarNome(String nome) {
+        if (nome == null || nome.isBlank()) {
+            throw new DominioException("O nome da sala não pode ser vazio ou nulo.");
+        }
+    }
+
+    private void validarPreco(Dinheiro preco) {
+        if (preco == null) {
+            throw new DominioException("O preço da sala é obrigatório.");
+        }
+    }
+
+    private void validarSetor(Setor setor) {
+        if (setor == null || setor.getId() == null) {
+            throw new DominioException("A sala deve estar associada a um setor válido.");
         }
     }
 }
