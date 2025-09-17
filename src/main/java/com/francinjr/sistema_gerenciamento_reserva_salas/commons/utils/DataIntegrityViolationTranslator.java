@@ -9,41 +9,36 @@ import java.util.Optional;
 
 @Component
 public class DataIntegrityViolationTranslator {
+    private static final Map<String, ErrorInfo> CONSTRAINT_TO_ERROR_INFO_MAP = Map.of(
+            "setores_nome_uk", new ErrorInfo("nome", "Este nome de setor já está em uso."),
+            "salas_nome_uk", new ErrorInfo("nome", "Este nome de sala já está em uso."),
+            "pessoas_fisicas_cpf_uk", new ErrorInfo("pessoaFisica.cpf", "O CPF informado já está em uso."),
+            "pessoas_fisicas_telefone_uk", new ErrorInfo("pessoaFisica.telefone", "O telefone informado já está em uso."),
 
-    /**
-     * Mapa que serve como um "dicionário" para traduzir nomes de constraints
-     * do banco de dados para nomes de campos de formulário.
-     * * Chave: Nome da constraint no SQL.
-     * Valor: Nome do campo no DTO/Entidade.
-     */
-    private static final Map<String, String> CONSTRAINT_TO_FIELD_MAP = Map.of(
-            "setores_nome_uk", "nome"
-            // Quando tiver um usuário, você adicionaria:
-            // "usuarios_email_uk", "email",
-            // "usuarios_cpf_uk", "cpf"
+            "usuarios_email_uk", new ErrorInfo("usuario.email", "O e-mail informado já está em uso."),
+            "recepcionistas_setor_id_uk", new ErrorInfo("setorId", "O setor selecionado já possui um recepcionista associado.")
     );
 
-    /**
-     * Método principal que recebe a exceção e o BindingResult do controller.
-     */
     public void translate(DataIntegrityViolationException ex, BindingResult bindingResult) {
         String rootMessage = Optional.ofNullable(ex.getRootCause())
                 .map(Throwable::getMessage)
                 .orElse("");
 
-        // Procura no dicionário qual constraint foi violada
-        for (Map.Entry<String, String> entry : CONSTRAINT_TO_FIELD_MAP.entrySet()) {
+        for (Map.Entry<String, ErrorInfo> entry : CONSTRAINT_TO_ERROR_INFO_MAP.entrySet()) {
             String constraintName = entry.getKey();
-            String fieldName = entry.getValue();
+            ErrorInfo errorInfo = entry.getValue();
 
             if (rootMessage.toLowerCase().contains(constraintName.toLowerCase())) {
-                String errorMessage = "O valor informado para '" + fieldName + "' já está em uso.";
-                bindingResult.rejectValue(fieldName, "erro.duplicado", errorMessage);
-                return; // Encontrou o erro, pode parar
+                bindingResult.rejectValue(errorInfo.fieldName(), "erro.duplicado", errorInfo.message());
+                return;
             }
         }
 
-        // Se não encontrou uma constraint conhecida, adiciona um erro global
         bindingResult.reject("erro.integridade", "Ocorreu um erro de integridade de dados não especificado.");
     }
+
+    /**
+     * Um 'record' privado para guardar os detalhes do erro de forma estruturada.
+     */
+    private record ErrorInfo(String fieldName, String message) {}
 }
