@@ -12,4 +12,5 @@ public class BuscarSalaDto {
     private BigDecimal preco;
     private String descricao;
     private String nomeSetor;
+    private Integer capacidadeMaxima;
 }

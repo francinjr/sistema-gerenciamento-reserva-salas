@@ -14,7 +14,7 @@ public class SalaMapper {
         }
 
         return new BuscarSalaDto(sala.getId(), sala.getNome(), sala.getPreco().getValor(), sala.getDescricao(), sala.getSetor()
-                .getNome());
+                .getNome(), sala.getCapacidadeMaxima());
     }
 
 
