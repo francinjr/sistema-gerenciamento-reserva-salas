@@ -82,12 +82,12 @@ public class SalaController {
     @GetMapping("/editar/{id}")
     public String exibirFormularioEdicao(@PathVariable Long id, Model model) {
         Sala sala = salaService.buscarPorId(id);
-        // Cria o DTO a partir da entidade para preencher o formulário
         SalvarSalaDto salaDto = new SalvarSalaDto(
                 sala.getNome(),
                 sala.getPreco().getValor().doubleValue(),
                 sala.getDescricao(),
-                sala.getSetor().getId()
+                sala.getSetor().getId(),
+                sala.getCapacidadeMaxima()
         );
 
         model.addAttribute("salaDto", salaDto);

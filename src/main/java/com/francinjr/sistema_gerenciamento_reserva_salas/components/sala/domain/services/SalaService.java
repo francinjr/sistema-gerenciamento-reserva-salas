@@ -21,13 +21,14 @@ public class SalaService {
 
     @Transactional
     public Sala criar(SalvarSalaDto dto) {
-        Setor setorAssociado = setorService.buscarPorId(dto.setorId());
+        Setor setorAssociado = setorService.buscarPorId(dto.getSetorId());
         Sala novaSala = new Sala(
                 null,
-                dto.nome(),
-                new Dinheiro(dto.preco()),
-                dto.descricao(),
-                setorAssociado
+                dto.getNome(),
+                new Dinheiro(dto.getPreco()),
+                dto.getDescricao(),
+                setorAssociado,
+                dto.getCapacidadeMaxima()
         );
         return salaRepository.save(novaSala);
     }
@@ -50,14 +51,15 @@ public class SalaService {
     @Transactional
     public Sala atualizar(Long id, SalvarSalaDto dto) {
         Sala salaExistente = buscarPorId(id);
-        Setor setorAssociado = setorService.buscarPorId(dto.setorId());
+        Setor setorAssociado = setorService.buscarPorId(dto.getSetorId());
 
         Sala dadosParaAtualizar = new Sala(
                 id,
-                dto.nome(),
-                new Dinheiro(dto.preco()),
-                dto.descricao(),
-                setorAssociado
+                dto.getNome(),
+                new Dinheiro(dto.getPreco()),
+                dto.getDescricao(),
+                setorAssociado,
+                dto.getCapacidadeMaxima()
         );
         salaExistente.atualizar(dadosParaAtualizar);
 

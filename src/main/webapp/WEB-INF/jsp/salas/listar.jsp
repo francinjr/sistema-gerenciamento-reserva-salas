@@ -27,6 +27,7 @@
                 <tr>
                     <th>Nome</th>
                     <th>Preço por Período</th>
+                    <th>Capacidade</th>
                     <th>Descrição</th>
                     <th>Setor</th>
                     <th style="width: 1%; white-space: nowrap;">Ações</th>
@@ -48,6 +49,7 @@
                             <fmt:setLocale value="pt_BR"/>
                             <fmt:formatNumber value="${sala.preco}" type="currency"/>
                         </td>
+                        <td><c:out value="${sala.capacidadeMaxima}"/> pessoas</td>
                         <td><c:out value="${sala.descricao}"/></td>
                         <td><c:out value="${sala.nomeSetor}"/></td>
                         <td class="actions-cell">

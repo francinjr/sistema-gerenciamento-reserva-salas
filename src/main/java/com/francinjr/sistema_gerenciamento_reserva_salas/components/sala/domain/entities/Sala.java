@@ -27,6 +27,9 @@ public class Sala {
     )
     private Dinheiro preco;
 
+    @Column(name = "capacidade_maxima", nullable = false)
+    private Integer capacidadeMaxima;
+
     @Column(name = "descricao")
     private String descricao;
 
@@ -34,16 +37,18 @@ public class Sala {
     @JoinColumn(name = "setor_id", nullable = false, foreignKey = @ForeignKey(name = "fk_sala_para_setor"))
     private Setor setor;
 
-    public Sala(Long id, String nome, Dinheiro preco, String descricao, Setor setor) {
+    public Sala(Long id, String nome, Dinheiro preco, String descricao, Setor setor, Integer capacidadeMaxima) {
         this.validarNome(nome);
         this.validarPreco(preco);
         this.validarSetor(setor);
+        this.validarCapacidadeMaxima(capacidadeMaxima);
 
         this.id = id;
         this.nome = nome;
         this.preco = preco;
         this.descricao = descricao;
         this.setor = setor;
+        this.capacidadeMaxima = capacidadeMaxima;
     }
 
     public void changeNome(String nome) {
@@ -65,11 +70,17 @@ public class Sala {
         this.setor = setor;
     }
 
+    public void changeCapacidadeMaxima(Integer capacidadeMaxima) {
+        this.validarCapacidadeMaxima(capacidadeMaxima);
+        this.capacidadeMaxima = capacidadeMaxima;
+    }
+
     public void atualizar(Sala salaComDadosNovos) {
         this.changeNome(salaComDadosNovos.getNome());
         this.changePreco(salaComDadosNovos.getPreco());
         this.changeDescricao(salaComDadosNovos.getDescricao());
         this.changeSetor(salaComDadosNovos.getSetor());
+        this.changeCapacidadeMaxima(salaComDadosNovos.getCapacidadeMaxima());
     }
 
     private void validarNome(String nome) {
@@ -87,6 +98,12 @@ public class Sala {
     private void validarSetor(Setor setor) {
         if (setor == null || setor.getId() == null) {
             throw new DominioException("A sala deve estar associada a um setor válido.");
+        }
+    }
+
+    private void validarCapacidadeMaxima(Integer capacidade) {
+        if (capacidade == null || capacidade <= 0) {
+            throw new DominioException("A capacidade máxima da sala deve ser um número positivo.");
         }
     }
 }
