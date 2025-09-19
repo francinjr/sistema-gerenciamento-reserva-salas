@@ -1,6 +1,5 @@
 package com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.web.controllers;
 
-
 import com.francinjr.sistema_gerenciamento_reserva_salas.commons.exceptions.DominioException;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.entities.Agendamento;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.entities.Cliente;
@@ -13,24 +12,21 @@ import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.services.SalaService;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.usuario.domain.entities.Usuario;
 import jakarta.validation.Valid;
-import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Collections;
 
 @Controller
 @RequestMapping("/agendamentos")
 @RequiredArgsConstructor
 public class AgendamentoController {
+
     private final AgendamentoService agendamentoService;
     private final SalaService salaService;
     private final ClienteRepository clienteRepository;
@@ -71,7 +67,8 @@ public class AgendamentoController {
             return "agendamentos/formulario-cliente";
         }
 
-        redirectAttributes.addFlashAttribute("mensagemSucesso", "Solicitação de agendamento enviada com sucesso!");
+        redirectAttributes.addFlashAttribute("mensagemSucesso",
+                "Solicitação de agendamento enviada com sucesso!");
         return "redirect:/";
     }
 
@@ -81,16 +78,19 @@ public class AgendamentoController {
             RedirectAttributes redirectAttributes) {
 
         Cliente cliente = clienteRepository.findByUsuarioId(usuarioLogado.getId())
-                .orElseThrow(() -> new IllegalStateException("Perfil de cliente não encontrado para o usuário logado."));
+                .orElseThrow(() -> new IllegalStateException(
+                        "Perfil de cliente não encontrado para o usuário logado."));
 
         try {
             agendamentoService.cancelarSolicitacao(agendamentoId, cliente);
-            redirectAttributes.addFlashAttribute("mensagemSucesso", "Sua solicitação de agendamento foi cancelada com sucesso.");
+            redirectAttributes.addFlashAttribute("mensagemSucesso",
+                    "Sua solicitação de agendamento foi cancelada com sucesso.");
         } catch (DominioException | SecurityException e) {
-            redirectAttributes.addFlashAttribute("erros", Collections.singletonList(e.getMessage()));
+            redirectAttributes.addFlashAttribute("erros",
+                    Collections.singletonList(e.getMessage()));
         }
 
-        return "redirect:/"; // Redireciona de volta para o dashboard do cliente
+        return "redirect:/";
     }
 
     @GetMapping("/solicitacao/{agendamentoId}")
@@ -101,7 +101,8 @@ public class AgendamentoController {
         Cliente cliente = clienteRepository.findByUsuarioId(usuarioLogado.getId())
                 .orElseThrow(() -> new IllegalStateException("Perfil de cliente não encontrado."));
 
-        Agendamento agendamento = agendamentoService.buscarSolicitacaoPorId(agendamentoId, cliente);
+        Agendamento agendamento = agendamentoService.buscarSolicitacaoDoCliente(agendamentoId,
+                cliente);
         DetalhesAgendamentoDto dto = agendamentoMapper.paraDetalhesDto(agendamento);
 
         model.addAttribute("agendamento", dto);

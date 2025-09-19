@@ -37,6 +37,10 @@ public class Sala {
     @JoinColumn(name = "setor_id", nullable = false, foreignKey = @ForeignKey(name = "fk_sala_para_setor"))
     private Setor setor;
 
+    @Embedded
+    @AttributeOverride(name = "valor", column = @Column(name = "caixa", nullable = false))
+    private Dinheiro caixa;
+
     public Sala(Long id, String nome, Dinheiro preco, String descricao, Setor setor, Integer capacidadeMaxima) {
         this.validarNome(nome);
         this.validarPreco(preco);
@@ -49,6 +53,7 @@ public class Sala {
         this.descricao = descricao;
         this.setor = setor;
         this.capacidadeMaxima = capacidadeMaxima;
+        this.caixa = new Dinheiro(0.0);
     }
 
     public void changeNome(String nome) {
@@ -104,6 +109,12 @@ public class Sala {
     private void validarCapacidadeMaxima(Integer capacidade) {
         if (capacidade == null || capacidade <= 0) {
             throw new DominioException("A capacidade máxima da sala deve ser um número positivo.");
+        }
+    }
+
+    public void adicionarAoCaixa(Dinheiro valor) {
+        if (valor != null) {
+            this.caixa = this.caixa.somar(valor);
         }
     }
 }
