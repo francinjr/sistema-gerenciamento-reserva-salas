@@ -5,6 +5,8 @@ import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.doma
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.entities.Cliente;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.entities.StatusAgendamento;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.repositories.AgendamentoRepository;
+import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.repositories.ClienteRepository;
+import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.web.dtos.AgendamentoInstantaneoDto;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.web.dtos.SalvarAgendamentoDto;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.entities.Sala;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.services.SalaService;
@@ -22,6 +24,7 @@ public class AgendamentoService {
 
     private final AgendamentoRepository agendamentoRepository;
     private final SalaService salaService;
+    private final ClienteRepository clienteRepository;
 
     @Transactional
     public Agendamento solicitar(SalvarAgendamentoDto dto, Cliente cliente) {
@@ -110,5 +113,28 @@ public class AgendamentoService {
     public Page<Agendamento> buscarAgendamentosAtivosPorSetor(Setor setor, Pageable pageable) {
         List<StatusAgendamento> statusesAtivos = List.of(StatusAgendamento.SOLICITADO, StatusAgendamento.CONFIRMADO);
         return agendamentoRepository.findBySalaSetorAndStatusIn(setor, statusesAtivos, pageable);
+    }
+
+    @Transactional
+    public Agendamento agendarInstantaneamente(AgendamentoInstantaneoDto dto) {
+        Sala sala = salaService.buscarPorId(dto.getSalaId());
+        Cliente cliente = clienteRepository.findById(dto.getClienteId())
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente com ID " + dto.getClienteId() + " não encontrado."));
+
+        // Cria a entidade Agendamento
+        Agendamento novoAgendamento = new Agendamento(
+                dto.getDataHoraInicio(), dto.getDataHoraFim(), sala, cliente, dto.getQuantidadePessoas());
+
+        // Define o status diretamente como CONFIRMADO
+        novoAgendamento.confirmarParaAgendamentoInstantenio();
+
+        // Salva para obter o ID e validar a constraint do banco
+        Agendamento agendamentoConfirmado = agendamentoRepository.save(novoAgendamento);
+        agendamentoRepository.flush(); // Força a execução do SQL
+
+        // Cancela solicitações concorrentes
+        cancelarSolicitacoesConflitantes(agendamentoConfirmado);
+
+        return agendamentoConfirmado;
     }
 }

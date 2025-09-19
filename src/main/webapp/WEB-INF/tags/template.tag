@@ -31,6 +31,13 @@
                         class="fa-solid fa-sitemap"></i> Setores</a></li>
                 <li><a href="#" class="${activeMenu == 'recepcionistas' ? 'active' : ''}"><i
                         class="fa-solid fa-concierge-bell"></i> Recepcionistas</a></li>
+                <sec:authorize access="hasAnyRole('ROLE_RECEPCIONISTA', 'ROLE_ADMINISTRADOR')">
+                    <li>
+                        <a href="<c:url value="/painel-recepcionista/agendar-sala" />" class="${activeMenu == 'agendar_sala' ? 'active' : ''}">
+                            <i class="fa-solid fa-calendar-plus"></i> Agendar Sala
+                        </a>
+                    </li>
+                </sec:authorize>
             </ul>
         </nav>
         <div class="sidebar-footer"><a href="#"><i class="fa-solid fa-arrow-right-from-bracket"></i>
