@@ -11,7 +11,7 @@
             <span class="status-badge status-${setor.status.name().toLowerCase()}">${setor.status.name()}</span>
         </div>
         <div class="caixa-info">
-            <span>Caixa do Dia</span>
+            <span>Caixa</span>
             <strong><fmt:formatNumber value="${caixaDoDia.valor}" type="currency"/></strong>
         </div>
         <div class="status-actions">

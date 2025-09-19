@@ -1,4 +1,4 @@
-package com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.web.mappers;
+package com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.web.mappers;
 
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.domain.entities.Agendamento;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.web.dtos.BuscarAgendamentoDto;

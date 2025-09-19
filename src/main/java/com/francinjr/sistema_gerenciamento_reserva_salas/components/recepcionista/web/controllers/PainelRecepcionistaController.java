@@ -6,7 +6,7 @@ import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.domain.services.AgendamentoService;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.services.ClienteService;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.web.dtos.AgendamentoInstantaneoDto;
-import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.web.mappers.AgendamentoMapper;
+import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.web.mappers.AgendamentoMapper;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.recepcionista.domain.entities.Recepcionista;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.recepcionista.domain.repositories.RecepcionistaRepository;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.entities.Sala;
@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
