@@ -1,6 +1,6 @@
 package com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.web.controllers;
 
-import com.francinjr.sistema_gerenciamento_reserva_salas.commons.utils.DataIntegrityViolationTranslator;
+import com.francinjr.sistema_gerenciamento_reserva_salas.commons.utils.DataIntegrityViolationTradutor;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.entities.Sala;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.services.SalaService;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.web.dtos.BuscarSalaDto;
@@ -32,7 +32,7 @@ public class SalaController {
     private final SalaService salaService;
     private final SetorService setorService;
     private final SalaMapper salaMapper;
-    private final DataIntegrityViolationTranslator violationTranslator;
+    private final DataIntegrityViolationTradutor violationTranslator;
 
     @GetMapping("/listar")
     public String listarSalas(

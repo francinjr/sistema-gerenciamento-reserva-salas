@@ -1,4 +1,4 @@
-package com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.valueobjects;
+package com.francinjr.sistema_gerenciamento_reserva_salas.commons.domain.valueobjects;
 
 import com.francinjr.sistema_gerenciamento_reserva_salas.commons.exceptions.DominioException;
 import jakarta.persistence.Embeddable;
