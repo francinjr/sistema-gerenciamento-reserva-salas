@@ -1,5 +1,6 @@
 package com.francinjr.sistema_gerenciamento_reserva_salas.components.recepcionista.web.controllers;
 
+import com.francinjr.sistema_gerenciamento_reserva_salas.commons.exceptions.DominioException;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.domain.entities.Agendamento;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.domain.entities.StatusAgendamento;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.domain.services.AgendamentoService;
@@ -20,6 +21,8 @@ import jakarta.validation.Valid;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -87,9 +90,17 @@ public class PainelRecepcionistaController {
         try {
             agendamentoService.confirmar(id);
             redirectAttributes.addFlashAttribute("mensagemSucesso", "Agendamento confirmado com sucesso!");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("erros", Collections.singletonList("Erro ao confirmar: " + e.getMessage()));
+
+            // Captura exceções de dados (como a do trigger)
+        } catch (DataAccessException e) {
+            String mensagemErro = "Conflito de horário! Já existe um agendamento confirmado para esta sala neste período.";
+            redirectAttributes.addFlashAttribute("erros", List.of(mensagemErro));
+
+            // Captura exceções de regras de negócio da nossa entidade
+        } catch (DominioException e) {
+            redirectAttributes.addFlashAttribute("erros", List.of(e.getMessage()));
         }
+
         return "redirect:/painel-recepcionista/dashboard";
     }
 
