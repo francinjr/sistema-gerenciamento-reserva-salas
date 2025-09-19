@@ -2,9 +2,15 @@ package com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.domai
 
 import com.francinjr.sistema_gerenciamento_reserva_salas.commons.exceptions.RecursoEmUsoException;
 import com.francinjr.sistema_gerenciamento_reserva_salas.commons.exceptions.RecursoNaoEncontradoException;
+import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.domain.repositories.AgendamentoRepository;
+import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.valueobjects.Dinheiro;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.domain.entities.Setor;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.domain.repositories.SetorRepository;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.web.dtos.SalvarSetorDto;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -18,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class SetorService {
 
     private final SetorRepository setorRepository;
+    private final AgendamentoRepository agendamentoRepository;
 
     @Transactional
     public Setor criar(SalvarSetorDto dadosParaSalvar) {
@@ -67,5 +74,40 @@ public class SetorService {
     @Transactional(readOnly = true)
     public List<Setor> buscarTodos() {
         return setorRepository.findAll();
+    }
+
+    /**
+     * Altera o status de um setor para ABERTO.
+     */
+    @Transactional
+    public Setor abrir(Long setorId) {
+        Setor setor = buscarPorId(setorId);
+        setor.abrir();
+        return setorRepository.save(setor);
+    }
+
+    /**
+     * Altera o status de um setor para FECHADO.
+     */
+    @Transactional
+    public Setor fechar(Long setorId) {
+        Setor setor = buscarPorId(setorId);
+        setor.fechar();
+        return setorRepository.save(setor);
+    }
+
+    /**
+     * Calcula o somatório do caixa de todas as salas de um setor,
+     * considerando apenas os agendamentos finalizados no dia atual.
+     */
+    @Transactional(readOnly = true)
+    public Dinheiro calcularCaixaDoDia(Long setorId) {
+        LocalDate hoje = LocalDate.now();
+        LocalDateTime inicioDoDia = hoje.atStartOfDay();
+        LocalDateTime fimDoDia = hoje.atTime(LocalTime.MAX);
+
+        BigDecimal total = agendamentoRepository.sumValorFinalizacaoBySetorAndData(setorId, inicioDoDia, fimDoDia);
+
+        return new Dinheiro(total != null ? total : BigDecimal.ZERO);
     }
 }

@@ -1,4 +1,4 @@
-package com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.entities;
+package com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.domain.entities;
 
 public enum StatusAgendamento {
     SOLICITADO,    // Cliente fez o pedido, aguardando confirmação

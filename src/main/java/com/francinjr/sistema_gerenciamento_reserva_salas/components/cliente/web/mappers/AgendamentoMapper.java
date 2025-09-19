@@ -1,8 +1,8 @@
 package com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.web.mappers;
 
-import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.entities.Agendamento;
-import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.web.dtos.BuscarAgendamentoDto;
-import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.web.dtos.DetalhesAgendamentoDto;
+import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.domain.entities.Agendamento;
+import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.web.dtos.BuscarAgendamentoDto;
+import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.web.dtos.DetalhesAgendamentoDto;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 

@@ -6,18 +6,18 @@
     <div class="content-card">
         <div class="card-header">
             <h1>Setores</h1>
-            <form id="searchForm" action="<c:url value='/setores/listar' />" method="get"
-                  class="header-controls">
-                <input type="hidden" name="size" value="${setoresPage.size}">
-
-                <div class="search-container">
-                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                    <input type="text" id="searchInput" name="nome"
-                           placeholder="Pesquisar por nome..."
-                           value="${termoBusca}" onkeyup="debounceSearch()">
-                </div>
-                <a href="<c:url value="/setores/novo" />" class="btn btn-primary">Novo Setor</a>
-            </form>
+            <div class="header-controls">
+                <form id="searchForm" action="<c:url value='/setores/listar' />" method="get" class="header-controls">
+                    <input type="hidden" name="size" value="${setoresPage.size}">
+                    <div class="search-container">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" id="searchInput" name="nome"
+                               placeholder="Pesquisar por nome..."
+                               value="${termoBusca}" onkeyup="debounceSearch()">
+                    </div>
+                    <a href="<c:url value="/setores/novo" />" class="btn btn-primary">Novo Setor</a>
+                </form>
+            </div>
         </div>
 
         <div class="table-wrapper">
@@ -26,17 +26,49 @@
                 <tr>
                     <th>Nome</th>
                     <th>Descrição</th>
+                    <th>Status</th>
                     <th style="width: 1%; white-space: nowrap;">Ações</th>
                 </tr>
                 </thead>
                 <tbody>
+                <c:if test="${empty setoresPage.content}">
+                    <tr>
+                        <td colspan="4" style="text-align: center; color: #6c757d;">Nenhum setor
+                            encontrado.
+                        </td>
+                    </tr>
+                </c:if>
+
                 <c:forEach var="setor" items="${setoresPage.content}">
                     <tr>
                         <td><c:out value="${setor.nome}"/></td>
                         <td><c:out value="${setor.descricao}"/></td>
+                        <td>
+                                <%-- Exibe o status com uma "badge" colorida --%>
+                            <span class="status-badge status-${setor.status.name().toLowerCase()}">
+                                <c:out value="${setor.status.name()}"/>
+                            </span>
+                        </td>
                         <td class="actions-cell">
-                            <a href="<c:url value='/setores/editar/${setor.id}' />"
-                               class="btn btn-secondary">Editar</a>
+
+                                <%-- Ações condicionais para Abrir ou Fechar o setor --%>
+                            <c:choose>
+                                <c:when test="${setor.status == 'FECHADO'}">
+                                    <form action="<c:url value='/setores/${setor.id}/abrir' />" method="post" style="display:inline;">
+                                        <button type="submit" class="btn btn-success">Abrir</button>
+                                    </form>
+                                </c:when>
+                                <c:otherwise>
+                                    <form action="<c:url value='/setores/${setor.id}/fechar' />" method="post" style="display:inline;">
+                                        <button type="submit" class="btn btn-danger">Fechar</button>
+                                    </form>
+                                </c:otherwise>
+                            </c:choose>
+
+                                <%-- Ação para Editar --%>
+                            <a href="<c:url value='/setores/editar/${setor.id}' />" class="btn btn-secondary">Editar</a>
+
+                                <%-- Formulário para a ação de Excluir --%>
                             <form id="deleteForm-${setor.id}"
                                   action="<c:url value='/setores/excluir/${setor.id}' />"
                                   method="post" style="display:inline;">
@@ -68,7 +100,7 @@
             </form>
 
             <div class="page-info">
-                <span>Página ${setoresPage.number + 1} de ${setoresPage.totalPages}</span>
+                <span>Página ${setoresPage.number + 1} de ${setoresPage.totalPages > 0 ? setoresPage.totalPages : 1}</span>
             </div>
 
             <div class="pagination-nav">

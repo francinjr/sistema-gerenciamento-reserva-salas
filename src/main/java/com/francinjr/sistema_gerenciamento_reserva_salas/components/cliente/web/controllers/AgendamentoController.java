@@ -1,12 +1,12 @@
 package com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.web.controllers;
 
 import com.francinjr.sistema_gerenciamento_reserva_salas.commons.exceptions.DominioException;
-import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.entities.Agendamento;
+import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.domain.entities.Agendamento;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.entities.Cliente;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.repositories.ClienteRepository;
-import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.services.AgendamentoService;
-import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.web.dtos.DetalhesAgendamentoDto;
-import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.web.dtos.SalvarAgendamentoDto;
+import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.domain.services.AgendamentoService;
+import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.web.dtos.DetalhesAgendamentoDto;
+import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.web.dtos.SalvarAgendamentoDto;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.web.mappers.AgendamentoMapper;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.entities.Sala;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.services.SalaService;

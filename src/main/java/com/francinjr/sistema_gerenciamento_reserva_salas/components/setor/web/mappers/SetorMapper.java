@@ -5,16 +5,15 @@ import com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.web.dt
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+
 @Component
 public class SetorMapper {
-
     public BuscarSetorDto paraDto(Setor setor) {
         if (setor == null) {
             return null;
         }
-        return new BuscarSetorDto(setor.getId(), setor.getNome(), setor.getDescricao());
+        return new BuscarSetorDto(setor);
     }
-
 
     public Page<BuscarSetorDto> paginaEntidadeParaPaginaDto(Page<Setor> page) {
         if (page == null) {

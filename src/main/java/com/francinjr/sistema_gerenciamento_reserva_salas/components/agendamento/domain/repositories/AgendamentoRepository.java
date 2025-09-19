@@ -1,8 +1,9 @@
-package com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.repositories;
+package com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.domain.repositories;
 
-import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.entities.Agendamento;
-import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.entities.StatusAgendamento;
+import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.domain.entities.Agendamento;
+import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.domain.entities.StatusAgendamento;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.domain.entities.Setor;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -40,4 +41,15 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> 
     Page<Agendamento> findBySalaSetorAndStatus(Setor setor, StatusAgendamento status, Pageable pageable);
 
     Page<Agendamento> findBySalaSetorAndStatusIn(Setor setor, List<StatusAgendamento> statuses, Pageable pageable);
+
+    @Query("SELECT SUM(a.valorFinalizacao.valor) FROM Agendamento a " +
+            "WHERE a.sala.setor.id = :setorId " +
+            "AND a.status = 'FINALIZADO' " +
+            "AND a.dataHoraFinalizacao >= :inicioDoDia " +
+            "AND a.dataHoraFinalizacao <= :fimDoDia")
+    BigDecimal sumValorFinalizacaoBySetorAndData(
+            @Param("setorId") Long setorId,
+            @Param("inicioDoDia") LocalDateTime inicioDoDia,
+            @Param("fimDoDia") LocalDateTime fimDoDia
+    );
 }

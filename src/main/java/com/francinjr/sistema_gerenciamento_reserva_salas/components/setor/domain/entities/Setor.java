@@ -5,6 +5,8 @@ import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,12 +40,17 @@ public class Setor {
     )
     private Set<Sala> salas = new HashSet<>();
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private StatusSetor status;
+
     public Setor(Long id, String nome, String descricao, Set<Sala> salas) {
         this.validarNome(nome);
 
         this.nome = nome;
         this.descricao = descricao;
         this.salas = salas;
+        this.status = StatusSetor.FECHADO;
     }
 
 
@@ -92,5 +99,19 @@ public class Setor {
     public void atualizar(Setor setorComDadosParaAtualizar) {
         this.changeNome(setorComDadosParaAtualizar.getNome());
         this.changeDescricao(setorComDadosParaAtualizar.getDescricao());
+    }
+
+    public void abrir() {
+        if (this.status == StatusSetor.ABERTO) {
+            throw new DominioException("O setor já está aberto.");
+        }
+        this.status = StatusSetor.ABERTO;
+    }
+
+    public void fechar() {
+        if (this.status == StatusSetor.FECHADO) {
+            throw new DominioException("O setor já está fechado.");
+        }
+        this.status = StatusSetor.FECHADO;
     }
 }

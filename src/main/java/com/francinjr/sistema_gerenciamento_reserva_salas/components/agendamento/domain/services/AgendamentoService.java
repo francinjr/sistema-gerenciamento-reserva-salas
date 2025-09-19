@@ -1,13 +1,13 @@
-package com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.services;
+package com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.domain.services;
 
 import com.francinjr.sistema_gerenciamento_reserva_salas.commons.exceptions.RecursoNaoEncontradoException;
-import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.entities.Agendamento;
+import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.domain.entities.Agendamento;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.entities.Cliente;
-import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.entities.StatusAgendamento;
-import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.repositories.AgendamentoRepository;
+import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.domain.entities.StatusAgendamento;
+import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.domain.repositories.AgendamentoRepository;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.repositories.ClienteRepository;
-import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.web.dtos.AgendamentoInstantaneoDto;
-import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.web.dtos.SalvarAgendamentoDto;
+import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.web.dtos.AgendamentoInstantaneoDto;
+import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.web.dtos.SalvarAgendamentoDto;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.entities.Sala;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.services.SalaService;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.domain.entities.Setor;
@@ -109,11 +109,6 @@ public class AgendamentoService {
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Agendamento com ID " + agendamentoId + " não encontrado."));
     }
 
-    @Transactional(readOnly = true)
-    public Page<Agendamento> buscarAgendamentosAtivosPorSetor(Setor setor, Pageable pageable) {
-        List<StatusAgendamento> statusesAtivos = List.of(StatusAgendamento.SOLICITADO, StatusAgendamento.CONFIRMADO);
-        return agendamentoRepository.findBySalaSetorAndStatusIn(setor, statusesAtivos, pageable);
-    }
 
     @Transactional
     public Agendamento agendarInstantaneamente(AgendamentoInstantaneoDto dto) {
@@ -136,5 +131,16 @@ public class AgendamentoService {
         cancelarSolicitacoesConflitantes(agendamentoConfirmado);
 
         return agendamentoConfirmado;
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Agendamento> buscarAgendamentosAtivosPorSetor(Setor setor, Pageable pageable) {
+        List<StatusAgendamento> statusesAtivos = List.of(StatusAgendamento.SOLICITADO, StatusAgendamento.CONFIRMADO);
+        return agendamentoRepository.findBySalaSetorAndStatusIn(setor, statusesAtivos, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Agendamento> buscarPorSetorEStatus(Setor setor, StatusAgendamento status, Pageable pageable) {
+        return agendamentoRepository.findBySalaSetorAndStatus(setor, status, pageable);
     }
 }
