@@ -1,5 +1,6 @@
 package com.francinjr.sistema_gerenciamento_reserva_salas.components.recepcionista.web.controllers;
 
+import com.francinjr.sistema_gerenciamento_reserva_salas.commons.exceptions.DominioException;
 import com.francinjr.sistema_gerenciamento_reserva_salas.commons.utils.DataIntegrityViolationTradutor;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.pessoa.web.dtos.SalvarPessoaFisicaDto;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.recepcionista.domain.entities.Recepcionista;
@@ -18,7 +19,12 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RequiredArgsConstructor
@@ -64,16 +70,10 @@ public class RecepcionistaController {
             Model model,
             RedirectAttributes redirectAttributes) {
 
-        // ========== DEBUG: VERIFICAR OS ERROS DE VALIDAÇÃO ==========
         if (bindingResult.hasErrors()) {
-            System.out.println("--- ERROS DE VALIDAÇÃO ENCONTRADOS ---");
-            bindingResult.getAllErrors().forEach(error -> System.out.println(error.toString()));
-            System.out.println("------------------------------------");
-
             model.addAttribute("setores", setorService.buscarTodos());
             return "recepcionistas/formulario";
         }
-        // ======================= FIM DO DEBUG ========================
 
         try {
             recepcionistaService.criar(dto);
@@ -81,7 +81,13 @@ public class RecepcionistaController {
             violationTranslator.translate(e, bindingResult);
             model.addAttribute("setores", setorService.buscarTodos());
             return "recepcionistas/formulario";
+        } catch (DominioException e) {
+            // Captura a exceção de CPF inválido e a adiciona ao campo correto
+            bindingResult.rejectValue("pessoaFisica.cpf", "erro.cpf", e.getMessage());
+            model.addAttribute("setores", setorService.buscarTodos());
+            return "recepcionistas/formulario";
         }
+
         redirectAttributes.addFlashAttribute("mensagemSucesso", "Recepcionista criado com sucesso!");
         return "redirect:/recepcionistas/listar";
     }
@@ -103,11 +109,13 @@ public class RecepcionistaController {
             BindingResult bindingResult,
             Model model,
             RedirectAttributes redirectAttributes) {
+
         if (bindingResult.hasErrors()) {
             model.addAttribute("recepcionistaId", id);
             model.addAttribute("setores", setorService.buscarTodos());
             return "recepcionistas/formulario";
         }
+
         try {
             recepcionistaService.atualizar(id, dto);
         } catch (DataIntegrityViolationException e) {
@@ -115,7 +123,13 @@ public class RecepcionistaController {
             model.addAttribute("recepcionistaId", id);
             model.addAttribute("setores", setorService.buscarTodos());
             return "recepcionistas/formulario";
+        } catch (DominioException e) {
+            bindingResult.rejectValue("pessoaFisica.cpf", "erro.cpf", e.getMessage());
+            model.addAttribute("recepcionistaId", id);
+            model.addAttribute("setores", setorService.buscarTodos());
+            return "recepcionistas/formulario";
         }
+
         redirectAttributes.addFlashAttribute("mensagemSucesso", "Recepcionista atualizado com sucesso!");
         return "redirect:/recepcionistas/listar";
     }
