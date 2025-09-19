@@ -1,5 +1,6 @@
 package com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.web.controllers;
 
+import com.francinjr.sistema_gerenciamento_reserva_salas.commons.exceptions.DominioException;
 import com.francinjr.sistema_gerenciamento_reserva_salas.commons.utils.DataIntegrityViolationTradutor;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.services.ClienteService;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.web.dtos.SalvarClienteDto;
@@ -47,6 +48,10 @@ public class ClienteController {
             clienteService.registrarNovoCliente(dto);
         } catch (DataIntegrityViolationException e) {
             violationTranslator.translate(e, bindingResult);
+            return "autenticacao/cadastro";
+        } catch (DominioException e) {
+            // Adiciona o erro ao campo específico do formulário
+            bindingResult.rejectValue("pessoaFisica.cpf", "erro.cpf", e.getMessage());
             return "autenticacao/cadastro";
         }
 
