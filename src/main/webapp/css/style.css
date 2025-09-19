@@ -705,3 +705,49 @@ tbody td {
   background-color: #d1e7dd;
   border: 1px solid #badbcc;
 }
+
+
+.setor-status-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+
+.status-info h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.caixa-info {
+  text-align: center;
+}
+
+.caixa-info span {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  display: block;
+}
+
+.caixa-info strong {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.status-badge.status-fechado {
+  color: #6a1a21;
+  background-color: #f8d7da;
+  border: 1px solid #f5c2c7;
+}
+
+.status-badge.status-aberto {
+  color: #0f5132;
+  background-color: #d1e7dd;
+  border: 1px solid #badbcc;
+}

@@ -1,5 +1,6 @@
 package com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.entities;
 
+import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.domain.entities.Agendamento;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.pessoa.domain.entities.PessoaFisica;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.usuario.domain.entities.Usuario;
 import jakarta.persistence.CascadeType;

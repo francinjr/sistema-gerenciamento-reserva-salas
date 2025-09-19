@@ -1,8 +1,12 @@
-package com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.entities;
+package com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.domain.entities;
 
 import com.francinjr.sistema_gerenciamento_reserva_salas.commons.exceptions.DominioException;
+import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.entities.Cliente;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.entities.Sala;
+import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.valueobjects.Dinheiro;
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -14,8 +18,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import lombok.Getter;
@@ -45,14 +47,17 @@ public class Agendamento {
     @Column(name = "quantidade_pessoas", nullable = false)
     private Integer quantidadePessoas;
 
-    @Column(name = "valor_total", nullable = false)
-    private BigDecimal valorTotal;
+    @Embedded
+    @AttributeOverride(name = "valor", column = @Column(name = "valor_total", nullable = false))
+    private Dinheiro valorTotal;
 
-    @Column(name = "valor_sinal", nullable = false)
-    private BigDecimal valorSinal;
+    @Embedded
+    @AttributeOverride(name = "valor", column = @Column(name = "valor_sinal", nullable = false))
+    private Dinheiro valorSinal;
 
-    @Column(name = "valor_finalizacao", nullable = false)
-    private BigDecimal valorFinalizacao;
+    @Embedded
+    @AttributeOverride(name = "valor", column = @Column(name = "valor_finalizacao", nullable = false))
+    private Dinheiro valorFinalizacao;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sala_id", nullable = false, foreignKey = @ForeignKey(name = "fk_agendamento_sala"))
@@ -61,6 +66,9 @@ public class Agendamento {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cliente_id", nullable = false, foreignKey = @ForeignKey(name = "fk_agendamento_cliente"))
     private Cliente cliente;
+
+    @Column(name = "data_hora_finalizacao")
+    private LocalDateTime dataHoraFinalizacao;
 
     public Agendamento(LocalDateTime dataHoraInicio, LocalDateTime dataHoraFim, Sala sala,
             Cliente cliente, Integer quantidadePessoas) {
@@ -80,9 +88,6 @@ public class Agendamento {
         this.calcularValores();
     }
 
-    // ================================================================
-    // MÉTODOS DE NEGÓCIO (API da Entidade)
-    // ================================================================
 
     public void confirmar() {
         if (this.status != StatusAgendamento.SOLICITADO) {
@@ -112,6 +117,7 @@ public class Agendamento {
             throw new DominioException("Apenas agendamentos com status 'CONFIRMADO' podem ser finalizados.");
         }
         this.status = StatusAgendamento.FINALIZADO;
+        this.dataHoraFinalizacao = LocalDateTime.now();
     }
 
     public void confirmarParaAgendamentoInstantenio() {
@@ -136,17 +142,16 @@ public class Agendamento {
         long minutos = duration.toMinutes();
 
         if (minutos <= 0) {
-            this.valorTotal = BigDecimal.ZERO;
+            this.valorTotal = new Dinheiro(0.0);
         } else {
-            BigDecimal horas = new BigDecimal(minutos).divide(new BigDecimal(60), 4,
-                    RoundingMode.HALF_UP);
-            this.valorTotal = horas.multiply(this.sala.getPreco().getValor())
-                    .setScale(2, RoundingMode.HALF_UP);
+            double horas = (double) minutos / 60.0;
+            // Usa o metodo 'multiplicar' do VO Dinheiro para calcular o valor total
+            this.valorTotal = this.sala.getPreco().multiplicar(horas);
         }
 
-        this.valorSinal = this.valorTotal.multiply(new BigDecimal("0.5"))
-                .setScale(2, RoundingMode.HALF_UP);
-        this.valorFinalizacao = this.valorTotal.subtract(this.valorSinal);
+        // Usa os métodos do VO Dinheiro para os outros cálculos
+        this.valorSinal = this.valorTotal.multiplicar(0.5);
+        this.valorFinalizacao = this.valorTotal.subtrair(this.valorSinal);
     }
 
     private void validarDatas(LocalDateTime inicio, LocalDateTime fim) {

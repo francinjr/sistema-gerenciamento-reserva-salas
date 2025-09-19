@@ -20,4 +20,10 @@ public interface SetorRepository extends JpaRepository<Setor, Long> {
     // Busca setores pelo nome e já carrega as salas associadas.
     @Query("SELECT s FROM Setor s LEFT JOIN FETCH s.salas WHERE lower(s.nome) LIKE lower(concat('%', :nome, '%'))")
     List<Setor> findAllWithSalasByNomeContainingIgnoreCase(@Param("nome") String nome);
+
+    @Query("SELECT s FROM Setor s LEFT JOIN FETCH s.salas WHERE s.status = 'ABERTO'")
+    List<Setor> findAllAbertosWithSalas();
+
+    @Query("SELECT s FROM Setor s LEFT JOIN FETCH s.salas WHERE s.status = 'ABERTO' AND lower(s.nome) LIKE lower(concat('%', :nome, '%'))")
+    List<Setor> findAllAbertosWithSalasByNomeContainingIgnoreCase(@Param("nome") String nome);
 }

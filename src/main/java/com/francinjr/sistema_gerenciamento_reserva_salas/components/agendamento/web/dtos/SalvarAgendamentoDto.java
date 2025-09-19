@@ -1,4 +1,4 @@
-package com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.web.dtos;
+package com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.web.dtos;
 
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Min;
