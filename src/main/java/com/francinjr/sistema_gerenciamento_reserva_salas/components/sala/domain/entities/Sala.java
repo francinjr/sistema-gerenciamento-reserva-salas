@@ -111,10 +111,4 @@ public class Sala {
             throw new DominioException("A capacidade máxima da sala deve ser um número positivo.");
         }
     }
-
-    public void adicionarAoCaixa(Dinheiro valor) {
-        if (valor != null) {
-            this.caixa = this.caixa.somar(valor);
-        }
-    }
 }

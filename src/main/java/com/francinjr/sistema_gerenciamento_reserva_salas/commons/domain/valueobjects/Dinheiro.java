@@ -39,10 +39,6 @@ public class Dinheiro {
         this.valor = valor.setScale(ESCALA_PADRAO, MODO_ARREDONDAMENTO_PADRAO);
     }
 
-    // ================================================================
-    // ✅ MÉTODOS DE OPERAÇÃO (A CORREÇÃO)
-    // ================================================================
-
     /**
      * Soma o valor deste objeto Dinheiro com outro, retornando um novo objeto Dinheiro.
      */

@@ -15,6 +15,8 @@ public class DataIntegrityViolationTradutor {
      * do banco de dados para informações de erro de formulário.
      * Chave: Nome da constraint no SQL.
      * Valor: Um objeto ErrorInfo contendo o caminho do campo no DTO e a mensagem de erro.
+     * Esse tipo de abordagem reduz a quantidade de código necessário para features e melhoram as entragas
+     * das tarefas umas vez que as validações se tornam mais rápidas
      */
     private static final Map<String, ErrorInfo> CONSTRAINT_TO_ERROR_INFO_MAP = Map.ofEntries(
             // Constraints de Setor
