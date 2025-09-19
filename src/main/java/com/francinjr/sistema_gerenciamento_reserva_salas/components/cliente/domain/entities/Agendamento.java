@@ -21,10 +21,11 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
+@NoArgsConstructor
+@Getter
 @Entity
 @Table(name = "tb_agendamentos")
-@Getter
-@NoArgsConstructor
 public class Agendamento {
 
     @Id
@@ -61,8 +62,11 @@ public class Agendamento {
     @JoinColumn(name = "cliente_id", nullable = false, foreignKey = @ForeignKey(name = "fk_agendamento_cliente"))
     private Cliente cliente;
 
-    public Agendamento(LocalDateTime dataHoraInicio, LocalDateTime dataHoraFim, Sala sala, Cliente cliente, Integer quantidadePessoas) {
+    public Agendamento(LocalDateTime dataHoraInicio, LocalDateTime dataHoraFim, Sala sala,
+            Cliente cliente, Integer quantidadePessoas) {
         validarDatas(dataHoraInicio, dataHoraFim);
+        validarSala(sala);
+        validarCliente(cliente);
         validarCapacidade(quantidadePessoas, sala);
 
         this.dataHoraInicio = dataHoraInicio;
@@ -70,27 +74,74 @@ public class Agendamento {
         this.sala = sala;
         this.cliente = cliente;
         this.quantidadePessoas = quantidadePessoas;
-        this.status = StatusAgendamento.SOLICITADO; // Todo novo agendamento começa como 'SOLICITADO'
+        this.status = StatusAgendamento.SOLICITADO;
 
         // Calcula os valores no momento da criação
-        calcularValores();
+        this.calcularValores();
     }
 
-    // Regras de negócio da entidade
-    private void calcularValores() {
-        if (this.sala == null || this.sala.getPreco() == null) {
-            throw new DominioException("Sala e preço são necessários para calcular os valores.");
+    // ================================================================
+    // MÉTODOS DE NEGÓCIO (API da Entidade)
+    // ================================================================
+
+    public void confirmar() {
+        if (this.status != StatusAgendamento.SOLICITADO) {
+            throw new DominioException(
+                    "Apenas agendamentos com status 'SOLICITADO' podem ser confirmados.");
         }
+        this.status = StatusAgendamento.CONFIRMADO;
+    }
+
+    /*
+    Recusar e cancelar podem parecer redudantes, mas essa separação tem um bom motivo, se trata do fato
+    de que recusar é uma operação do ator Recpecionista, enquanto que cancelar representa uma operação
+    do ator Cliente, por isso os metodos são segregados, caso haja mudanças na lógica envolvendo o cancelamento
+    de um agendamento, basta adicionar a lógica adequada no repsectivo lugar, dessa forma evita problemas de
+    incosistência.
+     */
+    public void recusar() {
+        mudarStatusParaCancelado();
+    }
+
+    public void cancelar() {
+        mudarStatusParaCancelado();
+    }
+
+    public void finalizar() {
+        if (this.status != StatusAgendamento.CONFIRMADO) {
+            throw new DominioException("Apenas agendamentos com status 'CONFIRMADO' podem ser finalizados.");
+        }
+        this.status = StatusAgendamento.FINALIZADO;
+    }
+
+    public boolean pertenceAoCliente(Cliente cliente) {
+        return this.cliente != null && this.cliente.getId().equals(cliente.getId());
+    }
+
+
+    private void mudarStatusParaCancelado() {
+        if (this.status != StatusAgendamento.SOLICITADO) {
+            throw new DominioException(
+                    "Apenas agendamentos com status 'SOLICITADO' podem ser alterados para 'CANCELADO'.");
+        }
+        this.status = StatusAgendamento.CANCELADO;
+    }
+
+    private void calcularValores() {
         Duration duration = Duration.between(this.dataHoraInicio, this.dataHoraFim);
         long minutos = duration.toMinutes();
+
         if (minutos <= 0) {
             this.valorTotal = BigDecimal.ZERO;
         } else {
-            BigDecimal horas = new BigDecimal(minutos).divide(new BigDecimal(60), 4, RoundingMode.HALF_UP);
-            this.valorTotal = horas.multiply(this.sala.getPreco().getValor()).setScale(2, RoundingMode.HALF_UP);
+            BigDecimal horas = new BigDecimal(minutos).divide(new BigDecimal(60), 4,
+                    RoundingMode.HALF_UP);
+            this.valorTotal = horas.multiply(this.sala.getPreco().getValor())
+                    .setScale(2, RoundingMode.HALF_UP);
         }
 
-        this.valorSinal = this.valorTotal.multiply(new BigDecimal("0.5")).setScale(2, RoundingMode.HALF_UP);
+        this.valorSinal = this.valorTotal.multiply(new BigDecimal("0.5"))
+                .setScale(2, RoundingMode.HALF_UP);
         this.valorFinalizacao = this.valorTotal.subtract(this.valorSinal);
     }
 
@@ -99,7 +150,20 @@ public class Agendamento {
             throw new DominioException("As datas de início e fim são obrigatórias.");
         }
         if (fim.isBefore(inicio) || fim.isEqual(inicio)) {
-            throw new DominioException("A data/hora de fim deve ser posterior à data/hora de início.");
+            throw new DominioException(
+                    "A data/hora de fim deve ser posterior à data/hora de início.");
+        }
+    }
+
+    private void validarSala(Sala sala) {
+        if (sala == null || sala.getId() == null) {
+            throw new DominioException("O agendamento deve estar associado a uma sala válida.");
+        }
+    }
+
+    private void validarCliente(Cliente cliente) {
+        if (cliente == null || cliente.getId() == null) {
+            throw new DominioException("O agendamento deve estar associado a um cliente válido.");
         }
     }
 
@@ -108,18 +172,9 @@ public class Agendamento {
             throw new DominioException("A quantidade de pessoas deve ser maior que zero.");
         }
         if (quantidadePessoas > sala.getCapacidadeMaxima()) {
-            throw new DominioException("A quantidade de pessoas excede a capacidade máxima da sala (" + sala.getCapacidadeMaxima() + ").");
+            throw new DominioException(
+                    "A quantidade de pessoas excede a capacidade máxima da sala ("
+                            + sala.getCapacidadeMaxima() + ").");
         }
-    }
-
-    public void cancelar() {
-        if (this.getStatus() != StatusAgendamento.SOLICITADO) {
-            throw new DominioException("Apenas agendamentos com status 'SOLICITADO' podem ser cancelados.");
-        }
-        this.status = StatusAgendamento.CANCELADO;
-    }
-
-    public boolean pertenceAoCliente(Cliente cliente) {
-        return this.getCliente().getId().equals(cliente.getId());
     }
 }

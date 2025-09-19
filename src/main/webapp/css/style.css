@@ -667,3 +667,41 @@ tbody td {
   color: #0f5132; /* Texto verde escuro */
   border: 1px solid #badbcc;
 }
+
+.btn-success {
+  background-color: #198754; /* Verde sucesso padrão */
+  border-color: #198754;
+  color: #fff;
+}
+
+.btn-success:hover {
+  background-color: #157347; /* Verde um pouco mais escuro no hover */
+  border-color: #146c43;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.3em 0.6em;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.375rem;
+  text-transform: capitalize;
+}
+
+/* Cor para o status SOLICITADO (amarelo/laranja) */
+.status-badge.status-solicitado {
+  color: #664d03;
+  background-color: #fff3cd;
+  border: 1px solid #ffecb5;
+}
+
+/* Cor para o status CONFIRMADO (verde) */
+.status-badge.status-confirmado {
+  color: #0f5132;
+  background-color: #d1e7dd;
+  border: 1px solid #badbcc;
+}

@@ -15,44 +15,36 @@
                 <h3>Dados da Sala</h3>
                 <div class="form-group">
                     <label>Sala</label>
-                    <input type="text" class="form-control"
-                           value="<c:out value="${agendamento.nomeSala}"/>" disabled>
+                    <input type="text" class="form-control" value="<c:out value="${agendamento.nomeSala}"/>" disabled>
                 </div>
                 <div class="form-group">
                     <label>Setor</label>
-                    <input type="text" class="form-control"
-                           value="<c:out value="${agendamento.nomeSetor}"/>" disabled>
+                    <input type="text" class="form-control" value="<c:out value="${agendamento.nomeSetor}"/>" disabled>
                 </div>
                 <div class="form-group">
                     <label>Capacidade Máxima</label>
-                    <input type="text" class="form-control"
-                           value="${agendamento.capacidadeSala} pessoas" disabled>
+                    <input type="text" class="form-control" value="${agendamento.capacidadeSala} pessoas" disabled>
                 </div>
 
                 <h3 style="margin-top: 1.5rem;">Dados do Agendamento</h3>
                 <div class="form-group">
                     <label>Início do Agendamento</label>
                         <%-- Exibe a String de data já formatada que veio do DTO --%>
-                    <input type="text" class="form-control" value="${agendamento.dataHoraInicio}"
-                           disabled>
+                    <input type="text" class="form-control" value="${agendamento.dataHoraInicio}" disabled>
                 </div>
                 <div class="form-group">
                     <label>Fim do Agendamento</label>
                         <%-- Exibe a String de data já formatada que veio do DTO --%>
-                    <input type="text" class="form-control" value="${agendamento.dataHoraFim}"
-                           disabled>
+                    <input type="text" class="form-control" value="${agendamento.dataHoraFim}" disabled>
                 </div>
                 <div class="form-group">
                     <label>Quantidade de Pessoas</label>
-                    <input type="text" class="form-control" value="${agendamento.quantidadePessoas}"
-                           disabled>
+                    <input type="text" class="form-control" value="${agendamento.quantidadePessoas}" disabled>
                 </div>
 
                 <div class="preco-calculado">
-                    <div>Valor Total: <strong><fmt:formatNumber value="${agendamento.valorTotal}"
-                                                                type="currency"/></strong></div>
-                    <div>Valor do Sinal (50%): <strong><fmt:formatNumber
-                            value="${agendamento.valorSinal}" type="currency"/></strong></div>
+                    <div>Valor Total: <strong><fmt:formatNumber value="${agendamento.valorTotal}" type="currency"/></strong></div>
+                    <div>Valor do Sinal (50%): <strong><fmt:formatNumber value="${agendamento.valorSinal}" type="currency"/></strong></div>
                 </div>
 
                 <div class="form-actions">

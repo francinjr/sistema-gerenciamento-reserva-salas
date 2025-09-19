@@ -16,6 +16,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @EnableWebSecurity
 public class SecurityConfig {
 
+    // Injeta o nosso handler de sucesso de autenticação customizado
     @Autowired
     private AuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
@@ -29,7 +30,11 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
+
+                        // Permite todos os encaminhamentos internos (FORWARD) para evitar o loop de redirecionamento com JSP
                         .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
+
+                        // Libera as URLs públicas que qualquer um pode acessar
                         .requestMatchers(
                                 "/login",
                                 "/clientes/novo",
@@ -38,13 +43,23 @@ public class SecurityConfig {
                                 "/js/**",
                                 "/images/**"
                         ).permitAll()
+
+                        // ✅ NOVA REGRA: Protege o painel da recepcionista
+                        .requestMatchers("/painel-recepcionista/**").hasAnyRole("RECEPCIONISTA", "ADMINISTRADOR")
+
+                        // Protege as rotas administrativas
+                        .requestMatchers("/setores/**", "/salas/**", "/recepcionistas/**").hasRole("ADMINISTRADOR")
+
+                        // Qualquer outra requisição exige que o usuário esteja autenticado
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
+                        // Usa o nosso handler customizado para decidir para onde redirecionar após o login
                         .successHandler(customAuthenticationSuccessHandler)
                 )
                 .logout(logout -> logout
+                        .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
                 );
 

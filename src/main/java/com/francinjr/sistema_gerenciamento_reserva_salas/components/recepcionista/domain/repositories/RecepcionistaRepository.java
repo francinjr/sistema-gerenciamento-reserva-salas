@@ -40,4 +40,6 @@ public interface RecepcionistaRepository extends JpaRepository<Recepcionista, Lo
      */
     @Query("SELECT r FROM Recepcionista r JOIN FETCH r.pessoaFisica JOIN FETCH r.setor JOIN FETCH r.usuario WHERE r.id = :id")
     Optional<Recepcionista> findByIdWithDetails(@Param("id") Long id);
+
+    Optional<Recepcionista> findByUsuarioId(Long usuarioId);
 }
