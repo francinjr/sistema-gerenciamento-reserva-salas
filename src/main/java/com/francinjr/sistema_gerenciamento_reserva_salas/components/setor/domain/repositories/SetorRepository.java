@@ -13,14 +13,6 @@ import org.springframework.stereotype.Repository;
 public interface SetorRepository extends JpaRepository<Setor, Long> {
     Page<Setor> findByNomeContainingIgnoreCase(String nome, Pageable pageable);
 
-    @Query("SELECT s FROM Setor s JOIN FETCH s.salas")
-    List<Setor> findAllWithSalas();
-
-
-    // Busca setores pelo nome e já carrega as salas associadas.
-    @Query("SELECT s FROM Setor s LEFT JOIN FETCH s.salas WHERE lower(s.nome) LIKE lower(concat('%', :nome, '%'))")
-    List<Setor> findAllWithSalasByNomeContainingIgnoreCase(@Param("nome") String nome);
-
     @Query("SELECT s FROM Setor s LEFT JOIN FETCH s.salas WHERE s.status = 'ABERTO'")
     List<Setor> findAllAbertosWithSalas();
 

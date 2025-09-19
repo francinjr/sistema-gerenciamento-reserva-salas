@@ -15,11 +15,4 @@ public class UsuarioMapper {
         return new BuscarUsuarioDto(usuario.getId(), usuario.getEmail().getValor(),
                 usuario.getPapel());
     }
-
-    public Page<BuscarUsuarioDto> paginaEntidadeParaPaginaDto(Page<Usuario> page) {
-        if (page == null) {
-            return null;
-        }
-        return page.map(this::paraDto);
-    }
 }
