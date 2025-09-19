@@ -29,12 +29,10 @@
                 <h3 style="margin-top: 1.5rem;">Dados do Agendamento</h3>
                 <div class="form-group">
                     <label>Início do Agendamento</label>
-                        <%-- Exibe a String de data já formatada que veio do DTO --%>
                     <input type="text" class="form-control" value="${agendamento.dataHoraInicio}" disabled>
                 </div>
                 <div class="form-group">
                     <label>Fim do Agendamento</label>
-                        <%-- Exibe a String de data já formatada que veio do DTO --%>
                     <input type="text" class="form-control" value="${agendamento.dataHoraFim}" disabled>
                 </div>
                 <div class="form-group">
@@ -50,10 +48,6 @@
                 <div class="form-actions">
                     <a href="<c:url value='/' />" class="btn btn-secondary">Voltar ao Dashboard</a>
 
-                        <%--
-                          Formulário que será submetido pelo modal de confirmação.
-                          A action aponta para a rota de cancelamento, passando o ID do agendamento.
-                        --%>
                     <form id="cancelForm-${agendamento.agendamentoId}"
                           action="<c:url value='/agendamentos/cancelar/${agendamento.agendamentoId}' />"
                           method="post" style="display:inline;">

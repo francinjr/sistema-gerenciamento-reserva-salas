@@ -26,14 +26,13 @@
                 <tr>
                     <th>Nome</th>
                     <th>Descrição</th>
-                    <th>Status</th>
                     <th style="width: 1%; white-space: nowrap;">Ações</th>
                 </tr>
                 </thead>
                 <tbody>
                 <c:if test="${empty setoresPage.content}">
                     <tr>
-                        <td colspan="4" style="text-align: center; color: #6c757d;">Nenhum setor
+                        <td colspan="3" style="text-align: center; color: #6c757d;">Nenhum setor
                             encontrado.
                         </td>
                     </tr>
@@ -43,27 +42,7 @@
                     <tr>
                         <td><c:out value="${setor.nome}"/></td>
                         <td><c:out value="${setor.descricao}"/></td>
-                        <td>
-                                <%-- Exibe o status com uma "badge" colorida --%>
-                            <span class="status-badge status-${setor.status.name().toLowerCase()}">
-                                <c:out value="${setor.status.name()}"/>
-                            </span>
-                        </td>
                         <td class="actions-cell">
-
-                                <%-- Ações condicionais para Abrir ou Fechar o setor --%>
-                            <c:choose>
-                                <c:when test="${setor.status == 'FECHADO'}">
-                                    <form action="<c:url value='/setores/${setor.id}/abrir' />" method="post" style="display:inline;">
-                                        <button type="submit" class="btn btn-success">Abrir</button>
-                                    </form>
-                                </c:when>
-                                <c:otherwise>
-                                    <form action="<c:url value='/setores/${setor.id}/fechar' />" method="post" style="display:inline;">
-                                        <button type="submit" class="btn btn-danger">Fechar</button>
-                                    </form>
-                                </c:otherwise>
-                            </c:choose>
 
                                 <%-- Ação para Editar --%>
                             <a href="<c:url value='/setores/editar/${setor.id}' />" class="btn btn-secondary">Editar</a>
@@ -109,7 +88,7 @@
                     <c:param name="size" value="${setoresPage.size}"/>
                     <c:param name="nome" value="${termoBusca}"/>
                 </c:url>
-                <a href="${prevUrl}" class="${setoresPage.first ? 'disabled' : ''}">
+                <a href="${prevUrl}" class="btn-nav ${setoresPage.first ? 'disabled' : ''}">
                     <i class="fa-solid fa-chevron-left"></i>
                 </a>
 
@@ -118,7 +97,7 @@
                     <c:param name="size" value="${setoresPage.size}"/>
                     <c:param name="nome" value="${termoBusca}"/>
                 </c:url>
-                <a href="${nextUrl}" class="${setoresPage.last ? 'disabled' : ''}">
+                <a href="${nextUrl}" class="btn-nav ${setoresPage.last ? 'disabled' : ''}">
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>
             </div>
