@@ -1,6 +1,6 @@
 package com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.web.controllers;
 
-import com.francinjr.sistema_gerenciamento_reserva_salas.commons.utils.DataIntegrityViolationTranslator;
+import com.francinjr.sistema_gerenciamento_reserva_salas.commons.utils.DataIntegrityViolationTradutor;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.services.ClienteService;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.web.dtos.SalvarClienteDto;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.pessoa.web.dtos.SalvarPessoaFisicaDto;
@@ -23,7 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class ClienteController {
 
     private final ClienteService clienteService;
-    private final DataIntegrityViolationTranslator violationTranslator;
+    private final DataIntegrityViolationTradutor violationTranslator;
 
     @GetMapping("/novo")
     public String exibirFormularioDeCadastro(Model model) {

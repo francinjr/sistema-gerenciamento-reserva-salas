@@ -11,7 +11,7 @@ import com.francinjr.sistema_gerenciamento_reserva_salas.components.recepcionist
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.recepcionista.domain.repositories.RecepcionistaRepository;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.entities.Sala;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.services.SalaService;
-import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.valueobjects.Dinheiro;
+import com.francinjr.sistema_gerenciamento_reserva_salas.commons.domain.valueobjects.Dinheiro;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.web.dtos.BuscarSalaDto;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.web.mappers.SalaMapper;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.domain.entities.Setor;

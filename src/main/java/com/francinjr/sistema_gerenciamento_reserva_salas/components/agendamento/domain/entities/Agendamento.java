@@ -3,7 +3,7 @@ package com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento
 import com.francinjr.sistema_gerenciamento_reserva_salas.commons.exceptions.DominioException;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.entities.Cliente;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.entities.Sala;
-import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.valueobjects.Dinheiro;
+import com.francinjr.sistema_gerenciamento_reserva_salas.commons.domain.valueobjects.Dinheiro;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;

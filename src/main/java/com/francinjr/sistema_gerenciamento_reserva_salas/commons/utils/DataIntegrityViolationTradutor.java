@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Component
-public class DataIntegrityViolationTranslator {
+public class DataIntegrityViolationTradutor {
 
     /**
      * Mapa que serve como um "dicionário" para traduzir nomes de constraints

@@ -7,7 +7,7 @@ import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.web.dtos.RelatorioSalaDto;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.web.dtos.RelatorioSetorDto;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.cliente.domain.entities.Cliente;
-import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.valueobjects.Dinheiro;
+import com.francinjr.sistema_gerenciamento_reserva_salas.commons.domain.valueobjects.Dinheiro;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.domain.entities.Setor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;

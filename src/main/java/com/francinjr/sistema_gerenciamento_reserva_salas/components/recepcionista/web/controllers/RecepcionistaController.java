@@ -1,6 +1,6 @@
 package com.francinjr.sistema_gerenciamento_reserva_salas.components.recepcionista.web.controllers;
 
-import com.francinjr.sistema_gerenciamento_reserva_salas.commons.utils.DataIntegrityViolationTranslator;
+import com.francinjr.sistema_gerenciamento_reserva_salas.commons.utils.DataIntegrityViolationTradutor;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.pessoa.web.dtos.SalvarPessoaFisicaDto;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.recepcionista.domain.entities.Recepcionista;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.recepcionista.domain.services.RecepcionistaService;
@@ -29,7 +29,7 @@ public class RecepcionistaController {
     private final RecepcionistaService recepcionistaService;
     private final SetorService setorService;
     private final RecepcionistaMapper recepcionistaMapper;
-    private final DataIntegrityViolationTranslator violationTranslator;
+    private final DataIntegrityViolationTradutor violationTranslator;
 
     @GetMapping("/listar")
     public String listarRecepcionistas(

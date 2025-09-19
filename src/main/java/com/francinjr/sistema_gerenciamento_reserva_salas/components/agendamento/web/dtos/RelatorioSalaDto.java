@@ -1,6 +1,6 @@
 package com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.web.dtos;
 
-import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.valueobjects.Dinheiro;
+import com.francinjr.sistema_gerenciamento_reserva_salas.commons.domain.valueobjects.Dinheiro;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

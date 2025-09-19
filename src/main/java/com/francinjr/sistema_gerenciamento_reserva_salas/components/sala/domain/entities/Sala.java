@@ -1,7 +1,7 @@
 package com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.entities;
 
 import com.francinjr.sistema_gerenciamento_reserva_salas.commons.exceptions.DominioException;
-import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.valueobjects.Dinheiro;
+import com.francinjr.sistema_gerenciamento_reserva_salas.commons.domain.valueobjects.Dinheiro;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.domain.entities.Setor;
 import jakarta.persistence.*;
 import lombok.Getter;

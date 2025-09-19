@@ -3,7 +3,7 @@ package com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.domai
 import com.francinjr.sistema_gerenciamento_reserva_salas.commons.exceptions.RecursoEmUsoException;
 import com.francinjr.sistema_gerenciamento_reserva_salas.commons.exceptions.RecursoNaoEncontradoException;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.agendamento.domain.repositories.AgendamentoRepository;
-import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.valueobjects.Dinheiro;
+import com.francinjr.sistema_gerenciamento_reserva_salas.commons.domain.valueobjects.Dinheiro;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.domain.entities.Setor;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.domain.repositories.SetorRepository;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.web.dtos.SalvarSetorDto;

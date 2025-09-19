@@ -1,6 +1,6 @@
 package com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.web.controllers;
 
-import com.francinjr.sistema_gerenciamento_reserva_salas.commons.utils.DataIntegrityViolationTranslator;
+import com.francinjr.sistema_gerenciamento_reserva_salas.commons.utils.DataIntegrityViolationTradutor;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.domain.entities.Setor;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.domain.services.SetorService;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.web.dtos.BuscarSetorDto;
@@ -29,7 +29,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class SetorController {
 
     private final SetorService setorService;
-    private final DataIntegrityViolationTranslator violationTranslator;
+    private final DataIntegrityViolationTradutor violationTranslator;
     private final SetorMapper setorMapper;
 
     @GetMapping("/listar")
