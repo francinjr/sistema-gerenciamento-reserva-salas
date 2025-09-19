@@ -8,6 +8,7 @@ import com.francinjr.sistema_gerenciamento_reserva_salas.components.pessoa.domai
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.usuario.domain.entities.PapelUsuario;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.usuario.domain.entities.Usuario;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.usuario.domain.services.UsuarioService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,5 +27,10 @@ public class ClienteService {
 
         Cliente novoCliente = new Cliente(pessoaFisica, usuario);
         return clienteRepository.save(novoCliente);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Cliente> buscarTodos() {
+        return clienteRepository.findAll();
     }
 }

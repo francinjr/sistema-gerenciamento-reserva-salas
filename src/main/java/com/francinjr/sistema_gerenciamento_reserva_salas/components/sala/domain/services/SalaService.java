@@ -7,6 +7,7 @@ import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.domain.
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.sala.web.dtos.SalvarSalaDto;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.domain.entities.Setor;
 import com.francinjr.sistema_gerenciamento_reserva_salas.components.setor.domain.services.SetorService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -72,5 +73,10 @@ public class SalaService {
             throw new RecursoNaoEncontradoException("Sala com ID " + id + " não encontrada.");
         }
         salaRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Sala> buscarPorSetor(Setor setor) {
+        return salaRepository.findBySetor(setor);
     }
 }

@@ -114,6 +114,10 @@ public class Agendamento {
         this.status = StatusAgendamento.FINALIZADO;
     }
 
+    public void confirmarParaAgendamentoInstantenio() {
+        this.status = StatusAgendamento.CONFIRMADO;
+    }
+
     public boolean pertenceAoCliente(Cliente cliente) {
         return this.cliente != null && this.cliente.getId().equals(cliente.getId());
     }
