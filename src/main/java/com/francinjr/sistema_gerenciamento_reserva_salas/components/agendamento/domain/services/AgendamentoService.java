@@ -54,10 +54,19 @@ public class AgendamentoService {
 
     @Transactional
     public Agendamento confirmar(Long agendamentoId) {
-        Agendamento agendamento = buscarAgendamentoPorId(agendamentoId);
-        agendamento.confirmar();
-        Agendamento agendamentoConfirmado = agendamentoRepository.save(agendamento);
+        Agendamento agendamentoAConfirmar = buscarAgendamentoPorId(agendamentoId);
+
+        // Delega a mudança de status para a entidade
+        agendamentoAConfirmar.confirmar();
+
+        // Usa saveAndFlush() para forçar a execução do UPDATE
+        // e disparar a constraint do banco de dados imediatamente.
+        // Se houver conflito, uma DataIntegrityViolationException será lançada aqui.
+        Agendamento agendamentoConfirmado = agendamentoRepository.saveAndFlush(agendamentoAConfirmar);
+
+        // Esta parte só é executada se a constraint do banco passar
         cancelarSolicitacoesConflitantes(agendamentoConfirmado);
+
         return agendamentoConfirmado;
     }
 
